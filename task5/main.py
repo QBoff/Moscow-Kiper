@@ -9,19 +9,13 @@ import sqlite3
 from functools import partial
 
 
-class Pop(QWidget):
-    def __init__(self) -> None:
-        super().__init__()
-        uic.loadUi(join("task5", "pop.ui"), self)
-
-
 class EditInfo(QWidget):
     def __init__(self, id) -> None:
         super().__init__()
-        uic.loadUi(join("task5", "pop.ui"), self)
+        uic.loadUi(join("task5", "addEditCoffeeForm.ui"), self)
         self.id = id
         self.edit.clicked.connect(self.update)
-    
+
     def update(self):
         db = sqlite3.connect(join("task5", "coffee.sqlite"))
         cur = db.cursor()
@@ -36,7 +30,7 @@ class EditInfo(QWidget):
                 for w in i:
                     if w.isdigit():
                         raise ValueError
-            
+
             cs = float(self.costl.text())
             vl = float(self.volumel.text())
         except ValueError:
@@ -52,7 +46,7 @@ class EditInfo(QWidget):
 
             db.commit()
             db.close()
-    
+
     def addNewCoffeeSort(self):
         # req = INSERT INTO coffee (name_of_the_variety, degree_of_roasting, ground_or_in_grains, taste_description, cost, packing_volume)
         # VALUES ("1", "1", "1", "1", 1, 1)
@@ -69,12 +63,12 @@ class EditInfo(QWidget):
                 for w in i:
                     if w.isdigit():
                         raise ValueError
-            
+
             cs = float(self.costl.text())
             vl = float(self.volumel.text())
         except ValueError:
             self.errors.setText("Введены некорректные данные!!!")
-        
+
         cur.execute(f'''
                     INSERT INTO coffee (name_of_the_variety, degree_of_roasting, ground_or_in_grains, taste_description, cost, packing_volume)
                     VALUES (?, ?, ?, ?, ?, ?)''',
@@ -83,12 +77,13 @@ class EditInfo(QWidget):
         db.commit()
         db.close()
 
+
 class AddNewInfo(QWidget):
     def __init__(self) -> None:
         super().__init__()
-        uic.loadUi(join("task5", "pop2.ui"), self)
+        uic.loadUi(join("task5", "addEditCoffeeForm2.ui"), self)
         self.add.clicked.connect(self.addNewItem)
-    
+
     def addNewItem(self):
         db = sqlite3.connect(join("task5", "coffee.sqlite"))
         cur = db.cursor()
@@ -103,7 +98,7 @@ class AddNewInfo(QWidget):
                 for w in i:
                     if w.isdigit():
                         raise ValueError
-            
+
             cs = float(self.costl.text())
             vl = float(self.volumel.text())
         except ValueError:
@@ -116,7 +111,6 @@ class AddNewInfo(QWidget):
 
             db.commit()
             db.close()
-        
 
 
 class MyWidget(QMainWindow):
@@ -125,7 +119,6 @@ class MyWidget(QMainWindow):
         uic.loadUi(join("task5", "main.ui"), self)
         self.btn.clicked.connect(self.search)
         self.addNewCoffe.clicked.connect(self.addSomeInfo)
-        
 
     def search(self):
         self.listWidget.clear()
@@ -160,7 +153,7 @@ class MyWidget(QMainWindow):
         self.pop.volumel.setText(str(volume))
 
         self.pop.show()
-    
+
     def addSomeInfo(self):
         self.pop2 = AddNewInfo()
         self.pop2.show()
